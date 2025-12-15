@@ -626,9 +626,17 @@
     });
   </script>
  <script>
-const studentName = localStorage.getItem('studentName') || 'Student';
-document.getElementById('greeting').textContent = `Hello ${studentName}`;
+const nameSpan = document.getElementById('studentName');
+const studentName = localStorage.getItem('studentName'); // reads from login page
+
+if(studentName) {
+    nameSpan.textContent = studentName; // fills the span
+} else {
+    nameSpan.textContent = "Student";   // fallback
+}
+
 </script>
 </body>
 </html>
+
 
