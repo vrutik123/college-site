@@ -1,907 +1,629 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Campus Flow - Home</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --background: oklch(0.99 0.003 264);
-            --foreground: oklch(0.15 0.01 264);
-            --card: oklch(1 0 0);
-            --card-foreground: oklch(0.15 0.01 264);
-            --primary: oklch(0.45 0.18 264);
-            --primary-foreground: oklch(0.99 0 0);
-            --secondary: oklch(0.58 0.15 184);
-            --secondary-foreground: oklch(0.99 0 0);
-            --muted: oklch(0.96 0.005 264);
-            --muted-foreground: oklch(0.48 0.01 264);
-            --accent: oklch(0.65 0.2 85);
-            --accent-foreground: oklch(0.15 0.01 264);
-            --border: oklch(0.92 0.005 264);
-            --destructive: oklch(0.577 0.245 27.325);
-            --radius: 0.75rem;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background-color: var(--background);
-            color: var(--foreground);
-            line-height: 1.5;
-        }
-
-        /* Header Styles */
-        .header {
-            position: sticky;
-            top: 0;
-            z-index: 50;
-            width: 100%;
-            border-bottom: 1px solid var(--border);
-            background-color: var(--card);
-            backdrop-filter: blur(10px);
-        }
-
-        .header-container {
-            max-width: 1280px;
-            margin: 0 auto;
-            display: flex;
-            height: 64px;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 1rem;
-        }
-
-        .logo-section {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .logo-icon {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: var(--primary);
-            padding: 0.5rem;
-            border-radius: 0.5rem;
-        }
-
-        .logo-text {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: var(--foreground);
-        }
-
-        .search-bar {
-            display: none;
-            flex: 1;
-            max-width: 28rem;
-            margin: 0 2rem;
-            position: relative;
-        }
-
-        @media (min-width: 768px) {
-            .search-bar {
-                display: flex;
-            }
-        }
-
-        .search-input {
-            width: 100%;
-            padding: 0.5rem 1rem 0.5rem 2.5rem;
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            background-color: var(--muted);
-            font-size: 0.875rem;
-        }
-
-        .search-icon {
-            position: absolute;
-            left: 0.75rem;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 1rem;
-            height: 1rem;
-            color: var(--muted-foreground);
-        }
-
-        .header-actions {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0.5rem;
-            border: none;
-            background: transparent;
-            cursor: pointer;
-            border-radius: 0.5rem;
-            position: relative;
-        }
-
-        .btn:hover {
-            background-color: var(--muted);
-        }
-
-        .notification-dot {
-            position: absolute;
-            top: 0.25rem;
-            right: 0.25rem;
-            width: 0.5rem;
-            height: 0.5rem;
-            background-color: var(--destructive);
-            border-radius: 50%;
-        }
-
-        .avatar {
-            width: 2.5rem;
-            height: 2.5rem;
-            border-radius: 50%;
-            background-color: var(--primary);
-            color: var(--primary-foreground);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-        }
-
-        /* Main Content */
-        .container {
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 1.5rem 1rem;
-        }
-
-        @media (min-width: 1024px) {
-            .container {
-                padding: 2rem 2rem;
-            }
-        }
-
-        .welcome-section {
-            margin-bottom: 2rem;
-        }
-
-        .welcome-title {
-            font-size: 1.875rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-        }
-
-        .welcome-subtitle {
-            color: var(--muted-foreground);
-            font-size: 1.125rem;
-        }
-
-        /* Stats Grid */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(1, 1fr);
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-
-        @media (min-width: 640px) {
-            .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        @media (min-width: 1024px) {
-            .stats-grid {
-                grid-template-columns: repeat(4, 1fr);
-            }
-        }
-
-        .stat-card {
-            background-color: var(--card);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 1.5rem;
-        }
-
-        .stat-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 0.5rem;
-        }
-
-        .stat-label {
-            font-size: 0.875rem;
-            color: var(--muted-foreground);
-        }
-
-        .stat-icon {
-            width: 1rem;
-            height: 1rem;
-            color: var(--muted-foreground);
-        }
-
-        .stat-value {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--foreground);
-        }
-
-        /* Quick Actions */
-        .quick-actions {
-            margin-bottom: 2rem;
-        }
-
-        .section-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-        }
-
-        .actions-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
-        }
-
-        @media (min-width: 640px) {
-            .actions-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-        }
-
-        @media (min-width: 1024px) {
-            .actions-grid {
-                grid-template-columns: repeat(6, 1fr);
-            }
-        }
-
-        .action-btn {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 1.5rem 1rem;
-            background-color: var(--card);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .action-btn:hover {
-            background-color: var(--muted);
-            transform: translateY(-2px);
-        }
-
-        .action-icon {
-            width: 1.5rem;
-            height: 1.5rem;
-            color: var(--primary);
-        }
-
-        .action-label {
-            font-size: 0.875rem;
-            font-weight: 500;
-            text-align: center;
-        }
-
-        /* Main Grid */
-        .main-grid {
-            display: grid;
-            grid-template-columns: repeat(1, 1fr);
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-
-        @media (min-width: 1024px) {
-            .main-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-        }
-
-        .col-span-2 {
-            grid-column: span 1;
-        }
-
-        @media (min-width: 1024px) {
-            .col-span-2 {
-                grid-column: span 2;
-            }
-        }
-
-        .card {
-            background-color: var(--card);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 1.5rem;
-        }
-
-        .card-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 1.5rem;
-        }
-
-        .card-title {
-            font-size: 1.125rem;
-            font-weight: 600;
-        }
-
-        .view-all-btn {
-            font-size: 0.875rem;
-            color: var(--primary);
-            background: none;
-            border: none;
-            cursor: pointer;
-            text-decoration: none;
-        }
-
-        .view-all-btn:hover {
-            text-decoration: underline;
-        }
-
-        /* Class Item */
-        .class-item {
-            display: flex;
-            gap: 1rem;
-            padding: 1rem;
-            background-color: var(--muted);
-            border-radius: calc(var(--radius) - 0.25rem);
-            margin-bottom: 1rem;
-        }
-
-        .class-time-badge {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            background-color: var(--primary);
-            color: var(--primary-foreground);
-            padding: 0.75rem;
-            border-radius: 0.5rem;
-            min-width: 4rem;
-        }
-
-        .time-display {
-            font-size: 1.125rem;
-            font-weight: 700;
-        }
-
-        .time-period {
-            font-size: 0.75rem;
-        }
-
-        .class-info {
-            flex: 1;
-        }
-
-        .class-name {
-            font-size: 1rem;
-            font-weight: 600;
-            margin-bottom: 0.25rem;
-        }
-
-        .class-details {
-            font-size: 0.875rem;
-            color: var(--muted-foreground);
-            margin-bottom: 0.5rem;
-        }
-
-        .join-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem 1rem;
-            background-color: var(--secondary);
-            color: var(--secondary-foreground);
-            border: none;
-            border-radius: 0.5rem;
-            font-size: 0.875rem;
-            font-weight: 500;
-            cursor: pointer;
-        }
-
-        .join-btn:hover {
-            opacity: 0.9;
-        }
-
-        /* Assignment Item */
-        .assignment-item {
-            padding: 1rem;
-            background-color: var(--muted);
-            border-radius: calc(var(--radius) - 0.25rem);
-            margin-bottom: 1rem;
-        }
-
-        .assignment-header {
-            display: flex;
-            align-items: start;
-            justify-content: space-between;
-            margin-bottom: 0.75rem;
-        }
-
-        .assignment-name {
-            font-size: 1rem;
-            font-weight: 600;
-            margin-bottom: 0.25rem;
-        }
-
-        .assignment-course {
-            font-size: 0.875rem;
-            color: var(--muted-foreground);
-        }
-
-        .priority-badge {
-            padding: 0.25rem 0.75rem;
-            border-radius: 1rem;
-            font-size: 0.75rem;
-            font-weight: 500;
-        }
-
-        .priority-high {
-            background-color: var(--destructive);
-            color: white;
-        }
-
-        .priority-medium {
-            background-color: var(--accent);
-            color: var(--accent-foreground);
-        }
-
-        .progress-section {
-            margin-bottom: 0.5rem;
-        }
-
-        .progress-label {
-            font-size: 0.875rem;
-            color: var(--muted-foreground);
-            margin-bottom: 0.25rem;
-        }
-
-        .progress-bar-container {
-            width: 100%;
-            height: 0.5rem;
-            background-color: var(--border);
-            border-radius: 1rem;
-            overflow: hidden;
-        }
-
-        .progress-bar {
-            height: 100%;
-            background-color: var(--primary);
-            transition: width 0.3s;
-        }
-
-        .due-date {
-            font-size: 0.875rem;
-            color: var(--muted-foreground);
-        }
-
-        /* Event Item */
-        .event-item {
-            display: flex;
-            gap: 1rem;
-            padding: 1rem;
-            background-color: var(--muted);
-            border-radius: calc(var(--radius) - 0.25rem);
-            margin-bottom: 1rem;
-        }
-
-        .event-date-badge {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            background-color: var(--accent);
-            color: var(--accent-foreground);
-            padding: 0.75rem;
-            border-radius: 0.5rem;
-            min-width: 3.5rem;
-        }
-
-        .event-day {
-            font-size: 1.5rem;
-            font-weight: 700;
-            line-height: 1;
-        }
-
-        .event-month {
-            font-size: 0.75rem;
-            text-transform: uppercase;
-        }
-
-        .event-info {
-            flex: 1;
-        }
-
-        .event-name {
-            font-size: 0.875rem;
-            font-weight: 600;
-            margin-bottom: 0.25rem;
-        }
-
-        .event-time {
-            font-size: 0.75rem;
-            color: var(--muted-foreground);
-            margin-bottom: 0.25rem;
-        }
-
-        .event-attendees {
-            font-size: 0.75rem;
-            color: var(--muted-foreground);
-        }
-
-        .assignments-section {
-            margin-top: 2rem;
-        }
-
-        .assignments-grid {
-            display: grid;
-            grid-template-columns: repeat(1, 1fr);
-            gap: 1rem;
-        }
-
-        @media (min-width: 768px) {
-            .assignments-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        @media (min-width: 1024px) {
-            .assignments-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-        }
-
-        /* Icon Styles */
-        svg {
-            width: 100%;
-            height: 100%;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Campus Flow - Smart Campus Management</title>
+  <meta name="description" content="Campus Flow - Your all-in-one campus companion. Smart queue monitoring, peer marketplace, student networking, and resource library." />
+  <meta name="theme-color" content="#0F172A" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --background: 222 47% 6%;
+      --foreground: 210 40% 98%;
+      --card: 222 47% 10%;
+      --card-foreground: 210 40% 98%;
+      --primary: 199 89% 48%;
+      --primary-foreground: 222 47% 6%;
+      --secondary: 252 56% 57%;
+      --secondary-foreground: 210 40% 98%;
+      --muted: 222 30% 18%;
+      --muted-foreground: 215 20% 65%;
+      --accent: 172 66% 50%;
+      --accent-foreground: 222 47% 6%;
+      --destructive: 0 72% 50%;
+      --success: 142 69% 45%;
+      --warning: 38 92% 50%;
+      --border: 222 30% 18%;
+      --radius: 1rem;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; border-color: hsl(var(--border)); }
+    body {
+      font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+      background: hsl(var(--background));
+      color: hsl(var(--foreground));
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container { max-width: 28rem; margin: 0 auto; padding: 1rem; padding-bottom: 6rem; }
+
+    /* Glass effects */
+    .glass { background: hsl(var(--card) / 0.8); backdrop-filter: blur(16px); border: 1px solid hsl(var(--border) / 0.5); }
+    .glass-strong { background: hsl(var(--card) / 0.95); backdrop-filter: blur(16px); border: 1px solid hsl(var(--border) / 0.5); }
+
+    /* Gradients */
+    .gradient-primary { background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--accent)) 100%); }
+    .gradient-purple { background: linear-gradient(135deg, hsl(var(--secondary)) 0%, hsl(252 56% 70%) 100%); }
+
+    /* Glows */
+    .glow-primary { box-shadow: 0 0 20px hsl(var(--primary) / 0.4); }
+    .glow-success { box-shadow: 0 0 20px hsl(var(--success) / 0.4); }
+
+    /* Text colors */
+    .text-foreground { color: hsl(var(--foreground)); }
+    .text-muted { color: hsl(var(--muted-foreground)); }
+    .text-primary { color: hsl(var(--primary)); }
+    .text-success { color: hsl(var(--success)); }
+    .text-warning { color: hsl(var(--warning)); }
+    .text-destructive { color: hsl(var(--destructive)); }
+
+    /* Background colors */
+    .bg-success { background: hsl(var(--success)); }
+    .bg-primary { background: hsl(var(--primary)); }
+    .bg-warning { background: hsl(var(--warning)); }
+    .bg-destructive { background: hsl(var(--destructive)); }
+    .bg-muted { background: hsl(var(--muted)); }
+    .bg-accent { background: hsl(var(--accent)); }
+
+    /* Utilities */
+    .rounded-xl { border-radius: 0.75rem; }
+    .rounded-2xl { border-radius: 1rem; }
+    .rounded-full { border-radius: 9999px; }
+    .flex { display: flex; }
+    .flex-col { flex-direction: column; }
+    .items-center { align-items: center; }
+    .items-start { align-items: start; }
+    .justify-between { justify-content: space-between; }
+    .justify-around { justify-content: space-around; }
+    .gap-1 { gap: 0.25rem; }
+    .gap-2 { gap: 0.5rem; }
+    .gap-3 { gap: 0.75rem; }
+    .gap-4 { gap: 1rem; }
+    .grid { display: grid; }
+    .grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
+    .flex-wrap { flex-wrap: wrap; }
+    .flex-1 { flex: 1; }
+    .flex-shrink-0 { flex-shrink: 0; }
+    .p-2 { padding: 0.5rem; }
+    .p-3 { padding: 0.75rem; }
+    .p-4 { padding: 1rem; }
+    .p-5 { padding: 1.25rem; }
+    .p-6 { padding: 1.5rem; }
+    .px-3 { padding-left: 0.75rem; padding-right: 0.75rem; }
+    .py-1 { padding-top: 0.25rem; padding-bottom: 0.25rem; }
+    .py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+    .py-4 { padding-top: 1rem; padding-bottom: 1rem; }
+    .mb-1 { margin-bottom: 0.25rem; }
+    .mb-2 { margin-bottom: 0.5rem; }
+    .mb-3 { margin-bottom: 0.75rem; }
+    .mb-4 { margin-bottom: 1rem; }
+    .mb-6 { margin-bottom: 1.5rem; }
+    .mt-1 { margin-top: 0.25rem; }
+    .mt-3 { margin-top: 0.75rem; }
+    .mt-6 { margin-top: 1.5rem; }
+    .mt-8 { margin-top: 2rem; }
+    .text-xs { font-size: 0.75rem; line-height: 1rem; }
+    .text-sm { font-size: 0.875rem; line-height: 1.25rem; }
+    .text-lg { font-size: 1.125rem; line-height: 1.75rem; }
+    .text-xl { font-size: 1.25rem; line-height: 1.75rem; }
+    .text-2xl { font-size: 1.5rem; }
+    .text-4xl { font-size: 2.25rem; }
+    .font-medium { font-weight: 500; }
+    .font-semibold { font-weight: 600; }
+    .font-bold { font-weight: 700; }
+    .truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .text-right { text-align: right; }
+    .text-left { text-align: left; }
+    .w-full { width: 100%; }
+    .min-w-0 { min-width: 0; }
+    .overflow-hidden { overflow: hidden; }
+    .overflow-x-auto { overflow-x: auto; }
+    .relative { position: relative; }
+    .absolute { position: absolute; }
+    .inset-0 { top: 0; right: 0; bottom: 0; left: 0; }
+    .fixed { position: fixed; }
+    .bottom-0 { bottom: 0; }
+    .left-0 { left: 0; }
+    .right-0 { right: 0; }
+    .top-1 { top: 0.25rem; }
+    .right-1 { right: 0.25rem; }
+    .z-50 { z-index: 50; }
+    .cursor-pointer { cursor: pointer; }
+    .transition-all { transition: all 0.2s ease; }
+    .transition-colors { transition: color 0.2s, background-color 0.2s; }
+    .transition-transform { transition: transform 0.2s; }
+    .opacity-10 { opacity: 0.1; }
+    .space-y-2 > * + * { margin-top: 0.5rem; }
+    .space-y-3 > * + * { margin-top: 0.75rem; }
+    .space-y-4 > * + * { margin-top: 1rem; }
+    .scrollbar-hide::-webkit-scrollbar { display: none; }
+    .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+    button { background: transparent; border: none; cursor: pointer; font-family: inherit; }
+
+    /* Avatar */
+    .avatar {
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 9999px; overflow: hidden;
+      background: hsl(var(--primary) / 0.2); color: hsl(var(--primary));
+      font-weight: 600;
+    }
+    .avatar-sm { width: 2rem; height: 2rem; font-size: 0.75rem; }
+    .avatar-md { width: 2.75rem; height: 2.75rem; font-size: 0.875rem; }
+    .avatar-lg { width: 3rem; height: 3rem; font-size: 1rem; }
+    .avatar-xl { width: 3.5rem; height: 3.5rem; font-size: 1rem; }
+
+    /* Badge */
+    .badge {
+      display: inline-flex; align-items: center; padding: 0.25rem 0.625rem;
+      border-radius: 9999px; font-size: 0.75rem; font-weight: 500;
+      border: 1px solid hsl(var(--border));
+    }
+    .badge-default { background: hsl(var(--primary)); color: hsl(var(--primary-foreground)); border-color: transparent; }
+    .badge-outline { background: transparent; color: hsl(var(--primary)); border-color: hsl(var(--primary) / 0.3); }
+    .badge-secondary { background: hsl(var(--muted)); color: hsl(var(--muted-foreground)); border-color: transparent; }
+
+    /* Progress bar */
+    .progress { width: 100%; height: 0.5rem; background: hsl(var(--muted) / 0.5); border-radius: 9999px; overflow: hidden; }
+    .progress-bar { height: 100%; border-radius: 9999px; transition: width 0.3s ease; }
+
+    /* Hover effects */
+    .hover-border:hover { border-color: hsl(var(--primary) / 0.5); }
+    .hover-bg:hover { background: hsl(var(--muted) / 0.5); }
+    .group:hover .group-hover-scale { transform: scale(1.1); }
+    .group:hover .group-hover-text { color: hsl(var(--primary)); }
+
+    /* Animations */
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+    @keyframes glow { from { box-shadow: 0 0 10px hsl(var(--primary) / 0.3); } to { box-shadow: 0 0 25px hsl(var(--primary) / 0.5); } }
+    .animate-pulse { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+    .animate-glow { animation: glow 2s ease-in-out infinite alternate; }
+
+    /* SVG Icons */
+    .icon { width: 1.25rem; height: 1.25rem; stroke: currentColor; stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+    .icon-sm { width: 1rem; height: 1rem; }
+    .icon-xs { width: 0.75rem; height: 0.75rem; }
+    .icon-lg { width: 1.5rem; height: 1.5rem; }
+
+    /* Section titles */
+    .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
+    .section-title { font-size: 1.125rem; font-weight: 700; color: hsl(var(--foreground)); }
+    .view-all { display: flex; align-items: center; gap: 0.25rem; font-size: 0.875rem; font-weight: 500; color: hsl(var(--primary)); }
+    .view-all:hover { color: hsl(var(--primary) / 0.8); }
+
+    /* Card base */
+    .card { padding: 1rem; border-radius: 1rem; }
+
+    /* Badge icons for achievements */
+    .badge-icon {
+      width: 1.75rem; height: 1.75rem;
+      border-radius: 9999px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem;
+    }
+    .badge-icon-sm { width: 1.25rem; height: 1.25rem; font-size: 0.625rem; }
+    .badge-gold { background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%); box-shadow: 0 0 10px rgba(245, 158, 11, 0.4); }
+    .badge-blue { background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%); box-shadow: 0 0 10px rgba(59, 130, 246, 0.4); }
+    .badge-purple { background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%); box-shadow: 0 0 10px rgba(139, 92, 246, 0.4); }
+    .badge-green { background: linear-gradient(135deg, #22c55e 0%, #4ade80 100%); box-shadow: 0 0 10px rgba(34, 197, 94, 0.4); }
+
+    /* Bottom nav */
+    .bottom-nav {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      background: hsl(var(--card) / 0.95);
+      backdrop-filter: blur(16px);
+      border-top: 1px solid hsl(var(--border) / 0.5);
+      z-index: 50;
+    }
+    .nav-items { display: flex; justify-content: space-around; align-items: center; padding: 0.5rem 1rem; max-width: 28rem; margin: 0 auto; }
+    .nav-item {
+      display: flex; flex-direction: column; align-items: center; gap: 0.25rem;
+      padding: 0.5rem 0.75rem; border-radius: 0.75rem;
+      color: hsl(var(--muted-foreground)); transition: color 0.2s;
+    }
+    .nav-item:hover { color: hsl(var(--foreground)); }
+    .nav-item.active { color: hsl(var(--primary)); }
+    .nav-icon-wrap { padding: 0.5rem; border-radius: 0.75rem; }
+    .nav-item.active .nav-icon-wrap { background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--accent)) 100%); box-shadow: 0 0 20px hsl(var(--primary) / 0.4); }
+    .nav-item.active .nav-icon-wrap .icon { color: hsl(var(--primary-foreground)); }
+    .nav-label { font-size: 0.75rem; font-weight: 500; }
+  </style>
 </head>
 <body>
-    <!-- Header -->
-    <header class="header">
-        <div class="header-container">
-            <div class="logo-section">
-                <div class="logo-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
-                        <path d="M6 12v5c3 3 9 3 12 0v-5"/>
-                    </svg>
-                </div>
-                <span class="logo-text">Campus Flow</span>
-            </div>
-
-            <div class="search-bar">
-                <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
-                </svg>
-                <input type="text" class="search-input" placeholder="Search courses, events, resources...">
-            </div>
-
-            <div class="header-actions">
-                <button class="btn">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/>
-                        <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>
-                    </svg>
-                    <span class="notification-dot"></span>
-                </button>
-                <button class="btn">
-                    <div class="avatar">AS</div>
-                </button>
-            </div>
+  <div class="container">
+    <!-- Greeting Header -->
+    <header class="flex items-center justify-between py-4">
+      <div class="flex items-center gap-4">
+        <div class="avatar avatar-lg" style="border: 2px solid hsl(var(--primary) / 0.3);">D</div>
+        <div>
+          <h1 class="text-xl font-bold text-foreground" id="greeting">Good Morning, Dirgh 👋</h1>
+          <p class="text-sm text-muted">Charusat University</p>
         </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <div class="flex items-center gap-2 px-3 py-1 rounded-full glass">
+          <div class="bg-success rounded-full glow-success animate-pulse" style="width: 0.5rem; height: 0.5rem;"></div>
+          <span class="text-xs font-medium text-muted">Campus Active</span>
+        </div>
+        <button class="relative p-2 rounded-xl glass hover-bg">
+          <svg class="icon text-muted" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <span class="absolute bg-destructive rounded-full" style="width: 0.5rem; height: 0.5rem; top: 0.5rem; right: 0.5rem;"></span>
+        </button>
+      </div>
     </header>
 
-    <!-- Main Content -->
-    <main class="container">
-        <!-- Welcome Section -->
-        <div class="welcome-section">
-            <h1 class="welcome-title" id="welcomeText">Welcome back!</h1>
-            <p class="welcome-subtitle">Here's what's happening with your classes today</p>
+    <!-- Smart Queue Card -->
+    <section class="mt-6">
+      <div class="relative overflow-hidden rounded-2xl glass-strong p-6 animate-glow">
+        <div class="absolute inset-0 gradient-primary opacity-10"></div>
+        <div class="relative">
+          <div class="flex items-center justify-between mb-6">
+            <div class="flex items-center gap-3">
+              <div class="p-2 rounded-xl gradient-primary">
+                <svg class="icon" style="color: hsl(var(--primary-foreground));" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+              </div>
+              <div>
+                <h2 class="text-lg font-bold text-foreground">Smart Queue Monitor</h2>
+                <p class="text-xs text-muted">Real-time campus tracking</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-1 text-success text-sm font-medium">
+              <svg class="icon-sm" viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+              <span>Live</span>
+            </div>
+          </div>
+
+          <div class="space-y-4">
+            <!-- Canteen -->
+            <div class="p-4 rounded-xl glass hover-border transition-all">
+              <div class="flex items-center justify-between mb-3">
+                <div class="flex items-center gap-3">
+                  <span class="text-2xl">🍽</span>
+                  <div>
+                    <h3 class="font-semibold text-foreground">Canteen</h3>
+                    <span class="text-xs font-medium text-warning">Medium Crowd</span>
+                  </div>
+                </div>
+                <div class="text-right">
+                  <div class="flex items-center gap-1 text-muted">
+                    <svg class="icon-sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    <span class="text-sm font-medium">12 mins</span>
+                  </div>
+                  <span class="text-xs text-muted">Est. wait</span>
+                </div>
+              </div>
+              <div class="progress"><div class="progress-bar bg-warning" style="width: 65%;"></div></div>
+            </div>
+
+            <!-- Library -->
+            <div class="p-4 rounded-xl glass hover-border transition-all">
+              <div class="flex items-center justify-between mb-3">
+                <div class="flex items-center gap-3">
+                  <span class="text-2xl">📚</span>
+                  <div>
+                    <h3 class="font-semibold text-foreground">Library</h3>
+                    <span class="text-xs font-medium text-success">Low Crowd</span>
+                  </div>
+                </div>
+                <div class="text-right">
+                  <div class="flex items-center gap-1 text-muted">
+                    <svg class="icon-sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    <span class="text-sm font-medium">3 mins</span>
+                  </div>
+                  <span class="text-xs text-muted">Est. wait</span>
+                </div>
+              </div>
+              <div class="progress"><div class="progress-bar bg-success" style="width: 25%;"></div></div>
+            </div>
+          </div>
         </div>
+      </div>
+    </section>
 
-        <!-- Progress Stats -->
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-header">
-                    <span class="stat-label">Total Courses</span>
-                    <svg class="stat-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/>
-                    </svg>
-                </div>
-                <div class="stat-value">6</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-header">
-                    <span class="stat-label">Assignments</span>
-                    <svg class="stat-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
-                        <polyline points="14 2 14 8 20 8"/>
-                    </svg>
-                </div>
-                <div class="stat-value">12</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-header">
-                    <span class="stat-label">Completed</span>
-                    <svg class="stat-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polyline points="20 6 9 17 4 12"/>
-                    </svg>
-                </div>
-                <div class="stat-value">8</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-header">
-                    <span class="stat-label">Avg. Grade</span>
-                    <svg class="stat-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
-                    </svg>
-                </div>
-                <div class="stat-value">92%</div>
-            </div>
+    <!-- Today's Schedule -->
+    <section class="mt-6">
+      <div class="rounded-2xl glass-strong p-5">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-lg font-bold text-foreground">Today's Schedule</h2>
+          <svg class="icon text-muted" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
         </div>
-
-        <!-- Quick Actions -->
-        <section class="quick-actions">
-            <h2 class="section-title">Quick Actions</h2>
-            <div class="actions-grid">
-                <button class="action-btn">
-                    <svg class="action-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <rect width="18" height="18" x="3" y="4" rx="2" ry="2"/>
-                        <line x1="16" x2="16" y1="2" y2="6"/>
-                        <line x1="8" x2="8" y1="2" y2="6"/>
-                        <line x1="3" x2="21" y1="10" y2="10"/>
-                    </svg>
-                    <span class="action-label">Schedule</span>
-                </button>
-                <button class="action-btn">
-                    <svg class="action-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
-                    </svg>
-                    <span class="action-label">Grades</span>
-                </button>
-                <button class="action-btn">
-                    <svg class="action-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/>
-                    </svg>
-                    <span class="action-label">Library</span>
-                </button>
-                <button class="action-btn">
-                    <svg class="action-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-                        <circle cx="9" cy="7" r="4"/>
-                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
-                        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-                    </svg>
-                    <span class="action-label">Groups</span>
-                </button>
-                <button class="action-btn">
-                    <svg class="action-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-                    </svg>
-                    <span class="action-label">Messages</span>
-                </button>
-                <button class="action-btn">
-                    <svg class="action-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="12" cy="12" r="10"/>
-                        <circle cx="12" cy="12" r="4"/>
-                        <line x1="21.17" x2="12" y1="8" y2="8"/>
-                        <line x1="3.95" x2="8.54" y1="6.06" y2="14"/>
-                        <line x1="10.88" x2="15.46" y1="21.94" y2="14"/>
-                    </svg>
-                    <span class="action-label">Resources</span>
-                </button>
+        <div class="space-y-3">
+          <div class="flex items-center justify-between p-3 rounded-xl glass">
+            <div class="flex items-center gap-3">
+              <div class="bg-primary rounded-full" style="width: 0.25rem; height: 2.5rem;"></div>
+              <div>
+                <h3 class="font-semibold text-foreground text-sm">Data Structures</h3>
+                <p class="text-xs text-muted">09:00 AM • Lab 301</p>
+              </div>
             </div>
-        </section>
-
-        <!-- Main Grid: Classes & Events -->
-        <div class="main-grid">
-            <!-- Today's Classes -->
-            <div class="col-span-2">
-                <div class="card">
-                    <div class="card-header">
-                        <h2 class="card-title">Today's Classes</h2>
-                        <a href="#" class="view-all-btn">View All</a>
-                    </div>
-
-                    <div class="class-item">
-                        <div class="class-time-badge">
-                            <div class="time-display">9:00</div>
-                            <div class="time-period">AM</div>
-                        </div>
-                        <div class="class-info">
-                            <div class="class-name">Data Structures & Algorithms</div>
-                            <div class="class-details">Room 301, Engineering Building • Prof. Johnson</div>
-                            <button class="join-btn">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <rect width="20" height="14" x="2" y="7" rx="2" ry="2"/>
-                                    <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
-                                </svg>
-                                Join Online
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="class-item">
-                        <div class="class-time-badge">
-                            <div class="time-display">11:30</div>
-                            <div class="time-period">AM</div>
-                        </div>
-                        <div class="class-info">
-                            <div class="class-name">Web Development</div>
-                            <div class="class-details">Lab 202, Computer Science • Prof. Martinez</div>
-                            <button class="join-btn">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <rect width="20" height="14" x="2" y="7" rx="2" ry="2"/>
-                                    <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
-                                </svg>
-                                Join Online
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="class-item">
-                        <div class="class-time-badge">
-                            <div class="time-display">2:00</div>
-                            <div class="time-period">PM</div>
-                        </div>
-                        <div class="class-info">
-                            <div class="class-name">Database Management Systems</div>
-                            <div class="class-details">Room 405, Engineering Building • Prof. Chen</div>
-                            <button class="join-btn">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <rect width="20" height="14" x="2" y="7" rx="2" ry="2"/>
-                                    <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
-                                </svg>
-                                Join Online
-                            </button>
-                        </div>
-                    </div>
-                </div>
+            <span class="badge badge-outline text-xs">Upcoming</span>
+          </div>
+          <div class="flex items-center justify-between p-3 rounded-xl glass">
+            <div class="flex items-center gap-3">
+              <div class="bg-success rounded-full" style="width: 0.25rem; height: 2.5rem;"></div>
+              <div>
+                <h3 class="font-semibold text-foreground text-sm">Web Development</h3>
+                <p class="text-xs text-muted">11:00 AM • Room 205</p>
+              </div>
             </div>
-
-            <!-- Campus Events -->
-            <div>
-                <div class="card">
-                    <div class="card-header">
-                        <h2 class="card-title">Campus Events</h2>
-                        <a href="#" class="view-all-btn">View All</a>
-                    </div>
-
-                    <div class="event-item">
-                        <div class="event-date-badge">
-                            <div class="event-day">15</div>
-                            <div class="event-month">DEC</div>
-                        </div>
-                        <div class="event-info">
-                            <div class="event-name">Tech Talk: AI in Education</div>
-                            <div class="event-time">4:00 PM - 5:30 PM</div>
-                            <div class="event-attendees">245 attending</div>
-                        </div>
-                    </div>
-
-                    <div class="event-item">
-                        <div class="event-date-badge">
-                            <div class="event-day">18</div>
-                            <div class="event-month">DEC</div>
-                        </div>
-                        <div class="event-info">
-                            <div class="event-name">Career Fair 2025</div>
-                            <div class="event-time">10:00 AM - 4:00 PM</div>
-                            <div class="event-attendees">892 attending</div>
-                        </div>
-                    </div>
-
-                    <div class="event-item">
-                        <div class="event-date-badge">
-                            <div class="event-day">20</div>
-                            <div class="event-month">DEC</div>
-                        </div>
-                        <div class="event-info">
-                            <div class="event-name">Winter Fest Concert</div>
-                            <div class="event-time">7:00 PM - 10:00 PM</div>
-                            <div class="event-attendees">567 attending</div>
-                        </div>
-                    </div>
-
-                    <div class="event-item">
-                        <div class="event-date-badge">
-                            <div class="event-day">22</div>
-                            <div class="event-month">DEC</div>
-                        </div>
-                        <div class="event-info">
-                            <div class="event-name">Hackathon Kickoff</div>
-                            <div class="event-time">9:00 AM - 9:00 PM</div>
-                            <div class="event-attendees">324 attending</div>
-                        </div>
-                    </div>
-                </div>
+            <span class="badge badge-outline text-xs">Upcoming</span>
+          </div>
+          <div class="flex items-center justify-between p-3 rounded-xl glass">
+            <div class="flex items-center gap-3">
+              <div class="bg-warning rounded-full" style="width: 0.25rem; height: 2.5rem;"></div>
+              <div>
+                <h3 class="font-semibold text-foreground text-sm">Database Systems</h3>
+                <p class="text-xs text-muted">02:00 PM • Room 104</p>
+              </div>
             </div>
+            <span class="badge badge-outline text-xs">Upcoming</span>
+          </div>
         </div>
+      </div>
+    </section>
 
-        <!-- Assignments Section -->
-        <section class="assignments-section">
-            <div class="card">
-                <div class="card-header">
-                    <h2 class="card-title">Pending Assignments</h2>
-                    <a href="#" class="view-all-btn">View All</a>
-                </div>
-
-                <div class="assignments-grid">
-                    <div class="assignment-item">
-                        <div class="assignment-header">
-                            <div>
-                                <div class="assignment-name">Algorithm Analysis Project</div>
-                                <div class="assignment-course">Data Structures</div>
-                            </div>
-                            <span class="priority-badge priority-high">High</span>
-                        </div>
-                        <div class="progress-section">
-                            <div class="progress-label">Progress: 75%</div>
-                            <div class="progress-bar-container">
-                                <div class="progress-bar" style="width: 75%"></div>
-                            </div>
-                        </div>
-                        <div class="due-date">Due: Dec 18, 2025</div>
-                    </div>
-
-                    <div class="assignment-item">
-                        <div class="assignment-header">
-                            <div>
-                                <div class="assignment-name">React Component Library</div>
-                                <div class="assignment-course">Web Development</div>
-                            </div>
-                            <span class="priority-badge priority-high">High</span>
-                        </div>
-                        <div class="progress-section">
-                            <div class="progress-label">Progress: 60%</div>
-                            <div class="progress-bar-container">
-                                <div class="progress-bar" style="width: 60%"></div>
-                            </div>
-                        </div>
-                        <div class="due-date">Due: Dec 20, 2025</div>
-                    </div>
-
-                    <div class="assignment-item">
-                        <div class="assignment-header">
-                            <div>
-                                <div class="assignment-name">Database Design Document</div>
-                                <div class="assignment-course">DBMS</div>
-                            </div>
-                            <span class="priority-badge priority-medium">Medium</span>
-                        </div>
-                        <div class="progress-section">
-                            <div class="progress-label">Progress: 40%</div>
-                            <div class="progress-bar-container">
-                                <div class="progress-bar" style="width: 40%"></div>
-                            </div>
-                        </div>
-                        <div class="due-date">Due: Dec 25, 2025</div>
-                    </div>
-                </div>
+    <!-- Quick Actions -->
+    <section class="mt-8">
+      <div class="grid grid-cols-2 gap-3">
+        <button class="group relative overflow-hidden p-4 rounded-2xl glass hover-border transition-all text-left">
+          <div class="relative">
+            <div class="p-2 rounded-xl gradient-primary mb-3" style="display: inline-flex;">
+              <svg class="icon" style="color: hsl(var(--primary-foreground));" viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
             </div>
-        </section>
-    </main>
-    <script>
-        const name = localStorage.getItem("studentName");
-        if (name) {
-            document.getElementById("welcomeText").innerText = `Welcome back, ${name}!`;
-        }
-</script>
+            <h3 class="font-semibold text-foreground text-sm mb-1">Campus Marketplace</h3>
+            <p class="text-xs text-muted">Buy & Sell with Peers</p>
+          </div>
+        </button>
+        <button class="group relative overflow-hidden p-4 rounded-2xl glass hover-border transition-all text-left">
+          <div class="relative">
+            <div class="p-2 rounded-xl gradient-purple mb-3" style="display: inline-flex;">
+              <svg class="icon" style="color: hsl(var(--foreground));" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
+            <h3 class="font-semibold text-foreground text-sm mb-1">Campus Network</h3>
+            <p class="text-xs text-muted">Find Teammates & Recruit</p>
+          </div>
+        </button>
+        <button class="group relative overflow-hidden p-4 rounded-2xl glass hover-border transition-all text-left">
+          <div class="relative">
+            <div class="p-2 rounded-xl bg-accent mb-3" style="display: inline-flex;">
+              <svg class="icon" style="color: hsl(var(--accent-foreground));" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+            </div>
+            <h3 class="font-semibold text-foreground text-sm mb-1">Resource Library</h3>
+            <p class="text-xs text-muted">Projects & PYQs</p>
+          </div>
+        </button>
+        <button class="group relative overflow-hidden p-4 rounded-2xl glass hover-border transition-all text-left">
+          <div class="relative">
+            <div class="p-2 rounded-xl bg-warning mb-3" style="display: inline-flex;">
+              <svg class="icon" style="color: hsl(var(--warning-foreground));" viewBox="0 0 24 24"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+            </div>
+            <h3 class="font-semibold text-foreground text-sm mb-1">My Achievements</h3>
+            <p class="text-xs text-muted">Badges & Contributions</p>
+          </div>
+        </button>
+      </div>
+    </section>
 
+    <!-- Marketplace Preview -->
+    <section class="mt-8">
+      <div class="section-header">
+        <h2 class="section-title">Trending on Marketplace</h2>
+        <button class="view-all">View All <svg class="icon-sm" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
+      </div>
+      <div class="flex gap-3 overflow-x-auto scrollbar-hide" style="margin: 0 -1rem; padding: 0 1rem;">
+        <div class="flex-shrink-0 p-3 rounded-xl glass hover-border transition-all cursor-pointer group" style="width: 9rem;">
+          <div class="text-4xl mb-2 group-hover-scale transition-transform">📱</div>
+          <h3 class="font-medium text-foreground text-sm mb-1 truncate">TI-84 Calculator</h3>
+          <p class="text-primary font-bold text-sm mb-2">₹1,500</p>
+          <div class="flex items-center gap-1">
+            <svg class="icon-xs text-success" viewBox="0 0 24 24" fill="currentColor"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            <span class="text-xs text-muted truncate">Verified Student</span>
+          </div>
+        </div>
+        <div class="flex-shrink-0 p-3 rounded-xl glass hover-border transition-all cursor-pointer group" style="width: 9rem;">
+          <div class="text-4xl mb-2 group-hover-scale transition-transform">📐</div>
+          <h3 class="font-medium text-foreground text-sm mb-1 truncate">Engineering Drawing Set</h3>
+          <p class="text-primary font-bold text-sm mb-2">₹800</p>
+          <div class="flex items-center gap-1">
+            <svg class="icon-xs text-success" viewBox="0 0 24 24" fill="currentColor"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            <span class="text-xs text-muted truncate">Club Member</span>
+          </div>
+        </div>
+        <div class="flex-shrink-0 p-3 rounded-xl glass hover-border transition-all cursor-pointer group" style="width: 9rem;">
+          <div class="text-4xl mb-2 group-hover-scale transition-transform">📕</div>
+          <h3 class="font-medium text-foreground text-sm mb-1 truncate">DBMS Textbook</h3>
+          <p class="text-primary font-bold text-sm mb-2">₹350</p>
+          <div class="flex items-center gap-1">
+            <svg class="icon-xs text-success" viewBox="0 0 24 24" fill="currentColor"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            <span class="text-xs text-muted truncate">Verified Student</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Campus Network -->
+    <section class="mt-8">
+      <div class="section-header">
+        <h2 class="section-title">Looking for Team Members</h2>
+        <button class="view-all">View All <svg class="icon-sm" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
+      </div>
+      <div class="space-y-3">
+        <div class="p-4 rounded-xl glass hover-border transition-all">
+          <div class="flex items-start justify-between">
+            <div class="flex items-center gap-3">
+              <div class="avatar avatar-md" style="border: 2px solid hsl(var(--secondary) / 0.3); background: hsl(var(--secondary) / 0.2); color: hsl(var(--secondary-foreground));">AP</div>
+              <div>
+                <h3 class="font-semibold text-foreground">Aarav Patel</h3>
+                <span class="badge badge-outline text-xs mt-1">Open to: Hackathon</span>
+              </div>
+            </div>
+            <button class="p-2 rounded-xl text-primary hover-bg transition-colors">
+              <svg class="icon" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+            </button>
+          </div>
+          <div class="flex flex-wrap gap-1 mt-3">
+            <span class="px-2 py-1 text-xs font-medium rounded-full" style="background: hsl(var(--muted) / 0.5); color: hsl(var(--muted-foreground));">C++</span>
+            <span class="px-2 py-1 text-xs font-medium rounded-full" style="background: hsl(var(--muted) / 0.5); color: hsl(var(--muted-foreground));">UI/UX</span>
+            <span class="px-2 py-1 text-xs font-medium rounded-full" style="background: hsl(var(--muted) / 0.5); color: hsl(var(--muted-foreground));">AI</span>
+          </div>
+        </div>
+        <div class="p-4 rounded-xl glass hover-border transition-all">
+          <div class="flex items-start justify-between">
+            <div class="flex items-center gap-3">
+              <div class="avatar avatar-md" style="border: 2px solid hsl(var(--secondary) / 0.3); background: hsl(var(--secondary) / 0.2); color: hsl(var(--secondary-foreground));">PS</div>
+              <div>
+                <h3 class="font-semibold text-foreground">Priya Sharma</h3>
+                <span class="badge badge-outline text-xs mt-1">Open to: Research</span>
+              </div>
+            </div>
+            <button class="p-2 rounded-xl text-primary hover-bg transition-colors">
+              <svg class="icon" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+            </button>
+          </div>
+          <div class="flex flex-wrap gap-1 mt-3">
+            <span class="px-2 py-1 text-xs font-medium rounded-full" style="background: hsl(var(--muted) / 0.5); color: hsl(var(--muted-foreground));">Python</span>
+            <span class="px-2 py-1 text-xs font-medium rounded-full" style="background: hsl(var(--muted) / 0.5); color: hsl(var(--muted-foreground));">ML</span>
+            <span class="px-2 py-1 text-xs font-medium rounded-full" style="background: hsl(var(--muted) / 0.5); color: hsl(var(--muted-foreground));">Data</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Resource Library -->
+    <section class="mt-8">
+      <div class="section-header">
+        <h2 class="section-title">Recently Added Resources</h2>
+        <button class="view-all">View All <svg class="icon-sm" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
+      </div>
+      <div class="space-y-2">
+        <div class="flex items-center gap-3 p-3 rounded-xl glass hover-border transition-all cursor-pointer group">
+          <div class="p-2 rounded-xl" style="background: hsl(var(--accent) / 0.1);">
+            <svg class="icon" style="color: hsl(var(--foreground));" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          </div>
+          <div class="flex-1 min-w-0">
+            <h3 class="font-medium text-foreground text-sm truncate group-hover-text transition-colors">Operating Systems PYQs (2023)</h3>
+            <div class="flex items-center gap-2 text-xs text-muted">
+              <span>Question Paper</span>
+              <span>•</span>
+              <span class="flex items-center gap-1"><span>⚡</span> Rahul M.</span>
+            </div>
+          </div>
+          <svg class="icon-sm text-muted group-hover-text transition-colors" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+        <div class="flex items-center gap-3 p-3 rounded-xl glass hover-border transition-all cursor-pointer group">
+          <div class="p-2 rounded-xl" style="background: hsl(var(--accent) / 0.1);">
+            <svg class="icon" style="color: hsl(var(--foreground));" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          </div>
+          <div class="flex-1 min-w-0">
+            <h3 class="font-medium text-foreground text-sm truncate group-hover-text transition-colors">Hackathon Project – Smart Irrigation</h3>
+            <div class="flex items-center gap-2 text-xs text-muted">
+              <span>Project</span>
+              <span>•</span>
+              <span class="flex items-center gap-1"><span>🛡</span> Tech Club</span>
+            </div>
+          </div>
+          <svg class="icon-sm text-muted group-hover-text transition-colors" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+        <div class="flex items-center gap-3 p-3 rounded-xl glass hover-border transition-all cursor-pointer group">
+          <div class="p-2 rounded-xl" style="background: hsl(var(--accent) / 0.1);">
+            <svg class="icon" style="color: hsl(var(--foreground));" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          </div>
+          <div class="flex-1 min-w-0">
+            <h3 class="font-medium text-foreground text-sm truncate group-hover-text transition-colors">DSA Notes – Semester 3</h3>
+            <div class="flex items-center gap-2 text-xs text-muted">
+              <span>Notes</span>
+              <span>•</span>
+              <span class="flex items-center gap-1"><span>✓</span> Ananya K.</span>
+            </div>
+          </div>
+          <svg class="icon-sm text-muted group-hover-text transition-colors" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+      </div>
+    </section>
+
+    <!-- Profile Snapshot -->
+    <section class="mt-8">
+      <div class="p-4 rounded-2xl glass hover-border transition-all cursor-pointer">
+        <div class="flex items-center gap-3">
+          <div class="avatar avatar-xl" style="border: 2px solid hsl(var(--primary) / 0.3);">D</div>
+          <div class="flex-1 min-w-0">
+            <h3 class="font-bold text-foreground">Dirgh Patel</h3>
+            <p class="text-sm text-muted">Computer Science • 3rd Year</p>
+            <div class="flex items-center gap-1 mt-1">
+              <div class="badge-icon badge-icon-sm badge-gold">🏆</div>
+              <div class="badge-icon badge-icon-sm badge-blue">🛡</div>
+              <div class="badge-icon badge-icon-sm badge-purple">⚡</div>
+              <div class="badge-icon badge-icon-sm badge-green">✓</div>
+            </div>
+          </div>
+          <div class="text-right">
+            <div class="flex items-center gap-1 text-warning font-bold">
+              <svg class="icon-sm" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <span>1,250</span>
+            </div>
+            <span class="text-xs text-muted">Rep Score</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Bottom Navigation -->
+  <nav class="bottom-nav">
+    <div class="nav-items">
+      <button class="nav-item active">
+        <div class="nav-icon-wrap">
+          <svg class="icon" viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        </div>
+        <span class="nav-label">Home</span>
+      </button>
+      <button class="nav-item">
+        <div class="nav-icon-wrap">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        </div>
+        <span class="nav-label">Marketplace</span>
+      </button>
+      <button class="nav-item">
+        <div class="nav-icon-wrap">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <span class="nav-label">Network</span>
+      </button>
+      <button class="nav-item">
+        <div class="nav-icon-wrap">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        </div>
+        <span class="nav-label">Library</span>
+      </button>
+      <button class="nav-item">
+        <div class="nav-icon-wrap">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </div>
+        <span class="nav-label">Profile</span>
+      </button>
+    </div>
+  </nav>
+
+  <script>
+    // Dynamic greeting based on time
+    function updateGreeting() {
+      const hour = new Date().getHours();
+      let greeting;
+      if (hour < 12) greeting = "Good Morning";
+      else if (hour < 17) greeting = "Good Afternoon";
+      else greeting = "Good Evening";
+      document.getElementById('greeting').textContent = greeting + ", Dirgh 👋";
+    }
+    updateGreeting();
+
+    // Nav item click handler
+    document.querySelectorAll('.nav-item').forEach(item => {
+      item.addEventListener('click', function() {
+        document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+        this.classList.add('active');
+      });
+    });
+  </script>
 </body>
 </html>
-
