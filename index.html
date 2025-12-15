@@ -39,15 +39,6 @@
             width: 100%;
             text-align: center;
         }
-        .login-container {
-            background: rgba(255,255,255,0.92);
-            padding: 32px 28px 24px 28px;
-            border-radius: 10px;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
-            max-width: 350px;
-            width: 100%;
-            text-align: center;
-        }
         .college-name {
             font-size: 1.5em;
             font-weight: bold;
@@ -101,51 +92,53 @@
             <input type="text" id="student-id" name="student-id" required>
 
             <label for="password">Password</label>
-                <div style="position: relative;">
-                    <input type="password" id="password" name="password" required style="width: 100%; padding-right: 30px;">
-                    <span id="togglePassword" style="
-                        position: absolute;
-                        right: 8px;
-                        top: 50%;
-                        transform: translateY(-50%);
-                        cursor: pointer;
-                        font-size: 1.1em;
-                        color: #555;
-                    ">👁️</span>
-                </div>
-
+            <div style="position: relative; display: flex; align-items: center;">
+                <input type="password" id="password" name="password" required style="width: 100%; padding-right: 40px;">
+                <button type="button" id="togglePassword" style="
+                    position: absolute;
+                    right: 8px;
+                    background: transparent;
+                    border: none;
+                    cursor: pointer;
+                    font-size: 1.1em;
+                    color: #555;
+                ">👁️</button>
+            </div>
 
             <button class="login-btn" type="submit">Login</button>
         </form>
-       
-         <script>
-            document.getElementById('login-form').addEventListener('submit', async function(e) {
+    </div>
+
+    <script>
+        // Toggle password visibility
+        const togglePassword = document.getElementById('togglePassword');
+        const password = document.getElementById('password');
+
+        togglePassword.addEventListener('click', () => {
+            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+            password.setAttribute('type', type);
+            togglePassword.textContent = type === 'password' ? '👁️' : '🙈';
+        });
+
+        // Login form submission
+        document.getElementById('login-form').addEventListener('submit', async function(e) {
             e.preventDefault();
-
-            const formData = new FormData(this);
-
+            const form = e.target;
+            const formData = new FormData(form);
             try {
                 const response = await fetch('https://newwwww-1-xsbh.onrender.com/login', {
-                method: 'POST',
-                body: formData
-            });
-
-            if (response.ok) {
-                window.location.href = "home.html";
-            } else {
-                alert("Invalid user name or password");
+                    method: 'POST',
+                    body: formData
+                });
+                if (response.ok) {
+                    window.location.href = 'home.html';
+                } else {
+                    alert('Invalid user name or password');
+                }
+            } catch (err) {
+                alert('Backend not reachable');
             }
-            } catch (error) {
-                alert("Server not running. Please start backend.");
-            }
-             });
-        </script>
-
-       
-    </div>
+        });
+    </script>
 </body>
-
 </html>
-
-
-
