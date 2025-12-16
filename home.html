@@ -235,7 +235,7 @@
     <!-- Greeting Header -->
     <header class="flex items-center justify-between py-4">
       <div class="flex items-center gap-4">
-        <div class="avatar avatar-lg" style="border: 2px solid hsl(var(--primary) / 0.3);">D</div>
+        <div class="avatar avatar-lg" style="border: 2px solid hsl(var(--primary) / 0.3);"> id = "firstChar" </div>
         <div>
           <h1>Welcome, <span id="studentName"></span>!</h1>
           <p class="text-sm text-muted">Dharmsinh Desai University</p>
@@ -633,6 +633,8 @@
   const storedName = localStorage.getItem("studentName");
   document.getElementById("studentName").textContent = storedName || "";
   document.getElementById("studentNameh3").textContent = storedName || "";
+  const firstCharacter = storedName ? storedName.charAt(0) : "";
+  document.getElementById("firstChar").textContent = firstCharacter;
 
 </script>
 
@@ -640,6 +642,7 @@
 </script>
 </body>
 </html>
+
 
 
 
