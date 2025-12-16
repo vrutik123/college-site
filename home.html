@@ -549,7 +549,7 @@
           <div class="avatar avatar-xl" style="border: 2px solid hsl(var(--primary) / 0.3);">D</div>
           <div class="flex-1 min-w-0">
            <h3 class="font-bold text-foreground">
-              <span id="studentName"></span>
+              <span id="studentNameh3">!</span>
             </h3>
 
             <p class="text-sm text-muted">Computer Science • 3rd Year</p>
@@ -632,6 +632,7 @@
 <script>
   const storedName = localStorage.getItem("studentName");
   document.getElementById("studentName").textContent = storedName || "";
+  document.getElementById("studentNameh3").textContent = storedName || "";
 
 </script>
 
@@ -639,6 +640,7 @@
 </script>
 </body>
 </html>
+
 
 
 
