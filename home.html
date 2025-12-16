@@ -549,7 +549,7 @@
           <div class="avatar avatar-xl" style="border: 2px solid hsl(var(--primary) / 0.3);">D</div>
           <div class="flex-1 min-w-0">
            <h3 class="font-bold text-foreground">
-              <span id="studentNameH3"></span>
+              <span id="studentName"></span>
             </h3>
 
             <p class="text-sm text-muted">Computer Science • 3rd Year</p>
@@ -630,22 +630,25 @@
   </script>
  <script>
 <script>
-    // Get the student name from localStorage (saved on login page)
-    const studentName = localStorage.getItem('studentName') || "Student";
+    <script>
+  // Load student name
+  const savedName = localStorage.getItem('studentName');
 
-    // Fill h1
-    const h1Span = document.getElementById('studentName');
-    if(h1Span) h1Span.textContent = studentName;
+  if (savedName) {
+    document.getElementById('studentName').textContent = savedName;
+  } else {
+    // If no name found, send user back to login
+    window.location.href = "index.html";
+  }
+</script>
 
-    // Fill h3
-    const h3Span = document.getElementById('studentNameH3');
-    if(h3Span) h3Span.textContent = studentName;
 </script>
 
 
 </script>
 </body>
 </html>
+
 
 
 
