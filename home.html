@@ -630,17 +630,8 @@
   </script>
  <script>
 <script>
-    <script>
-  // Load student name
-  const savedName = localStorage.getItem('studentName');
-
-  if (savedName) {
-    document.getElementById('studentName').textContent = savedName;
-  } else {
-    // If no name found, send user back to login
-    window.location.href = "index.html";
-  }
-</script>
+  const storedName = localStorage.getItem("studentName");
+  document.getElementById("studentName").textContent = storedName || "";
 
 </script>
 
@@ -648,6 +639,7 @@
 </script>
 </body>
 </html>
+
 
 
 
